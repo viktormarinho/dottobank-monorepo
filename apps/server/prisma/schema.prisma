@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id         String   @id @default(uuid())
+  username   String   @unique
+  cpf        String
+  sexo       String
+  nascimento DateTime
+  telefone   String
+  User       User?
+}
+
+model Conta {
+  id       String @id @default(uuid())
+  dotto_id String
+  tipo     String
+  saldo    Float
+  User     User?
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String
+  password  String
+  createdAt DateTime
+  picture   String
+  firstTime Boolean
+
+  cliente   Cliente @relation(fields: [clienteId], references: [id])
+  clienteId String  @unique
+
+  conta                   Conta           @relation(fields: [contaId], references: [id])
+  contaId                 String          @unique
+  cartoes                 Cartao[]
+  transferenciasPagas     Transferencia[] @relation(name: "pagador")
+  transferenciasRecebidas Transferencia[] @relation(name: "recebedor")
+  emprestimos             Emprestimo[]
+}
+
+model Cartao {
+  id              String @id @default(uuid())
+  numero          String
+  validade        String
+  codigoSeguranca String
+  limite          Float
+  fatura          Float
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Transferencia {
+  id String @id @default(uuid())
+
+  pagador   User   @relation(fields: [pagadorId], references: [id], name: "pagador")
+  pagadorId String
+
+  recebedor   User   @relation(fields: [recebedorId], references: [id], name: "recebedor")
+  recebedorId String
+}
+
+model Emprestimo {
+  id     String @id @default(uuid())
+  status String
+  valor  Float
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
