@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
     });
 
     if (!user) {
-        return res.status(404).json({ err: 'User with provided email does not exist' });
+        return res.status(401).json({ err: 'User with provided email does not exist' });
     }
 
     if (!await argon2.verify(user.password, password)) {

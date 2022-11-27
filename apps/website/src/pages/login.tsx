@@ -3,7 +3,7 @@ import Head from "next/head";
 import Swal from 'sweetalert2'
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useRouter } from "next/router";
 import { CadastroData } from "./cadastro";
 
@@ -67,19 +67,20 @@ const LoginPage: NextPage = () => {
 
     const submitLogin = async (e: any) => {
         e.preventDefault()
-        const res = await axios.post('http://localhost:4000/auth/login', loginInfo)
-
-        if (res.data.token) {
+        try {
+            const res = await axios.post('http://localhost:4000/auth/login', loginInfo)
+            
             Toast.fire({
                 icon: 'success',
                 title: 'Logado com sucesso'
             })
             localStorage.setItem('token', res.data.token)
             router.push("/conta")
-        } else {
+        } catch (err: any) {
             Toast.fire({
                 icon: 'error',
-                title: 'Credenciais inválidas'
+                title: 'Credenciais inválidas',
+                text: err.response.data.err
             })
         }
     }
