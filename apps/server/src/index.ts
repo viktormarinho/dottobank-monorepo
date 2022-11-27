@@ -1,8 +1,16 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import auth from './auth';
+import website from './website';
 
 const app = express();
 
 app.use(cors());
-app.use(auth.router);
+app.use(bodyParser.json());
+app.use('/auth', auth.router);
+app.use('/web', website.router);
+
+app.listen(4000, () => {
+    console.log('Server listening at http://localhost:4000')
+})

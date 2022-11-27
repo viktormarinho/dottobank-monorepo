@@ -12,8 +12,8 @@ export const verifyJWT = (req: Req, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
     if (!token) return res.status(401).json({ err: 'No token provided' });
 
-    jwt.verify(token, SECRET, async (err, decoded) => {
-        if (err) return res.status(500).json({ err: 'Failed to authenticate token' });
+    jwt.verify(token.split(' ')[1], SECRET, async (err, decoded) => {
+        if (err) return res.status(500).json({ err: 'Failed to authenticate token', meta: err });
 
         const { id } = decoded as jwt.JwtPayload;
 
@@ -30,8 +30,8 @@ export const verifyJWT = (req: Req, res: Response, next: NextFunction) => {
         if (!user) return res.status(500).json({ err: 'Failed to find user with decoded id' });
 
         req.user = user;
+        next();
     })
-
 }
 
 router.post('/signup', async (req, res) => {
@@ -40,14 +40,15 @@ router.post('/signup', async (req, res) => {
     try {
         const user = await prisma.user.create({
             data: {
-                picture: '',
+                picture: 'https://protechlighting.com/wp-content/uploads/sites/101/2019/12/profile-placeholder-square.png',
                 password: await argon2.hash(userInfo.password),
                 firstTime: true,
                 email: userInfo.email,
                 createdAt: new Date(),
                 cliente: {
                     create: {
-                        ...userInfo.cliente
+                        ...userInfo.cliente,
+                        nascimento: new Date(userInfo.cliente.nascimento)
                     }
                 },
                 conta: {
@@ -55,17 +56,16 @@ router.post('/signup', async (req, res) => {
                         ...userInfo.conta
                     }
                 }
+            },
+            include: {
+                cliente: true
             }
         });
 
-        const payload = { id: user.id };
+        return res.json({ user });
 
-        const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
-
-        return res.json({ token });
-
-    } catch (err) {
-        return res.status(400).json({ err })
+    } catch (err: any) {
+        return res.status(400).json({ err: err.message });
     }
 })
 
@@ -91,6 +91,10 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
 
     return res.json({ token });
+})
+
+router.get('/me', verifyJWT, (req: Req, res) => {
+    return res.json({ user: req.user });
 })
 
 export default { router };
