@@ -10,6 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', auth.router);
 app.use('/web', website.router);
+app.use(express.static('public'))
 
 app.listen(4000, () => {
     console.log('Server listening at http://localhost:4000')
