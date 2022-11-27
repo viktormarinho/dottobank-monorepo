@@ -1,6 +1,7 @@
 import { Request } from "express"
 
 export interface UserInfo {
+    id: string
     email: string
     password: string
     cliente: {
