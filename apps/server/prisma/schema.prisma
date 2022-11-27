@@ -22,7 +22,7 @@ model Cliente {
 
 model Conta {
   id       String @id @default(uuid())
-  dotto_id String
+  dotto_id String @unique
   tipo     String
   saldo    Float
   User     User?

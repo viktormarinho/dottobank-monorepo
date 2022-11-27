@@ -8,6 +8,27 @@ const router = Router();
 const prisma = getPrisma();
 const SECRET = 'secret123456bomba';
 
+const generateDottoId: (username: string, counter?: number) => Promise<string> = async (username: string, counter: number = 0) => {
+    let dottoId = '@' + username.split(' ').join('')
+    if (counter > 0) {
+        dottoId += `${counter}`;
+    }
+
+    const existingUser = await prisma.user.findFirst({
+        where: {
+            conta: {
+                dotto_id: dottoId
+            }
+        }
+    });
+
+    if (existingUser) {
+        return generateDottoId(username, counter+1);
+    }
+
+    return dottoId;
+}
+
 export const verifyJWT = (req: Req, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
     if (!token) return res.status(401).json({ err: 'No token provided' });
@@ -36,6 +57,7 @@ export const verifyJWT = (req: Req, res: Response, next: NextFunction) => {
 
 router.post('/signup', async (req, res) => {
     const userInfo = req.body as UserInfo;
+    const dottoId = await generateDottoId(userInfo.cliente.username)
 
     try {
         const user = await prisma.user.create({
@@ -53,7 +75,8 @@ router.post('/signup', async (req, res) => {
                 },
                 conta: {
                     create: {
-                        ...userInfo.conta
+                        ...userInfo.conta,
+                        dotto_id: dottoId
                     }
                 }
             },
