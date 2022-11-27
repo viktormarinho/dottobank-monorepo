@@ -1,3 +1,4 @@
+import { generateDottoId } from './util';
 import { NextFunction, Response, Router } from 'express';
 import { getPrisma } from './database';
 import jwt from 'jsonwebtoken';
@@ -7,27 +8,6 @@ import { Req, UserInfo } from './types';
 const router = Router();
 const prisma = getPrisma();
 const SECRET = 'secret123456bomba';
-
-const generateDottoId: (username: string, counter?: number) => Promise<string> = async (username: string, counter: number = 0) => {
-    let dottoId = '@' + username.split(' ').join('')
-    if (counter > 0) {
-        dottoId += `${counter}`;
-    }
-
-    const existingUser = await prisma.user.findFirst({
-        where: {
-            conta: {
-                dotto_id: dottoId
-            }
-        }
-    });
-
-    if (existingUser) {
-        return generateDottoId(username, counter+1);
-    }
-
-    return dottoId;
-}
 
 export const verifyJWT = (req: Req, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;

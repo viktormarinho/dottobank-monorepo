@@ -18,9 +18,9 @@ const storage = multer.diskStorage({
 
         cb(null, `${fileName}.${extension}`);
     }
-})
+});
 
-const upload = multer({ storage })
+const upload = multer({ storage });
 
 const randInt = (min: number, max: number) => {
     min = Math.ceil(min);
