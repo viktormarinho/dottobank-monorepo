@@ -30,7 +30,7 @@ model Conta {
 
 model User {
   id        String   @id @default(uuid())
-  email     String
+  email     String @unique
   password  String
   createdAt DateTime
   picture   String

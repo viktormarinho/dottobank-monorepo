@@ -1,21 +1,8 @@
-import Fastify from 'fastify';
-import cors from '@fastify/cors';
+import express from 'express';
+import cors from 'cors';
+import auth from './auth';
 
-const fastify = Fastify({
-    logger: true
-});
+const app = express();
 
-fastify.register(cors, {
-    origin: false
-})
-
-const start = async () => {
-    try {
-        await fastify.listen({ port: 3000 });
-    } catch (err) {
-        fastify.log.error(err);
-        process.exit(1);
-    }
-}
-
-start();
+app.use(cors());
+app.use(auth.router);
