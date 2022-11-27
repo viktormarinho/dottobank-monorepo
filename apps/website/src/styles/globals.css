@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.input {
+    @apply focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none w-64
+    text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-2 ring-1
+  ring-slate-200 shadow-sm
+}
