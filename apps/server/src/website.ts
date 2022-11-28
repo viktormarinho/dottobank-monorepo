@@ -4,12 +4,20 @@ import { Req } from "./types";
 import { verifyJWT } from './auth';
 import multer from 'multer';
 import crypto from 'crypto';
+import fs from 'fs';
 
 const router = Router();
 const prisma = getPrisma();
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads/');
+        const dir = 'public/uploads/';
+
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir, { recursive: true });
+        }
+
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
         const extension = file.originalname.split('.')[1];
