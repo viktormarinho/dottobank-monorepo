@@ -154,6 +154,7 @@ const Cartao: NextPage = () => {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setModalOpen(false)}
+        style={{ content: {width: 300, height: 550, margin: 'auto'}}}
       >
         <h1 className="text-xl text-center font-semibold">Envie sua foto</h1>
         <div className="mt-12 flex items-center justify-center">
