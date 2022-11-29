@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import axios, { AxiosError } from 'axios'
+import axios from 'axios';
 import { useRouter } from "next/router";
 import { CadastroData } from "./cadastro";
 
