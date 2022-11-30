@@ -30,7 +30,7 @@ model Conta {
 
 model User {
   id        String   @id @default(uuid())
-  email     String @unique
+  email     String   @unique
   password  String
   createdAt DateTime
   picture   String
@@ -62,6 +62,7 @@ model Cartao {
 model Transferencia {
   id String @id @default(uuid())
 
+  valor     Float
   pagador   User   @relation(fields: [pagadorId], references: [id], name: "pagador")
   pagadorId String
 

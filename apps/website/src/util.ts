@@ -12,7 +12,9 @@ export interface UserInfo {
     email: string
     password: string
     hasPicture: boolean
+    picture: string
     cliente: {
+        id?: string
         username: string
         cpf: string
         sexo: string
@@ -20,6 +22,7 @@ export interface UserInfo {
         telefone: string
     }
     conta: {
+        id?: string
         dotto_id: string
         tipo: string
         saldo: number

@@ -105,7 +105,7 @@ const Cartao: NextPage = () => {
   }
 
   useEffect(() => {
-    let token: any = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
 
     if (!token) {
       Swal.mixin({
