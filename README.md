@@ -6,6 +6,8 @@ Entre na pasta.
 
 `pnpm install`
 
+(Caso não possua o pnpm, [siga estas instruções para instalar](https://pnpm.io/installation))
+
 Entre na pasta do servidor com o comando `cd apps/server/`.
 
 Digite `pnpm prisma db push` para gerar o banco de dados a partir do schema do prisma.
