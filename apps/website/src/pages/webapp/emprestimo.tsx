@@ -73,7 +73,7 @@ const EmprestimoRoute = () => {
                     <LoadingSpinner />
                 ): (
                     emprestimos.data?.length === 0 ? (
-                        <p>Você ainda não possui nenhum empréstimo!</p>
+                        <p className="text-center">Você ainda não possui nenhum empréstimo!</p>
                     ) : (
                         emprestimos.data!.map((emp, idx) => {
                             return <Emprestimo key={idx} emprestimo={emp} /> 
@@ -99,8 +99,8 @@ const EmprestimoRoute = () => {
 
 const Emprestimo = ({ emprestimo }: { emprestimo: EmprestimoRegister }) => {
     return (
-        <div className="rounded-xl mx-4 bg-slate-300 p-2 text-black flex flex-col gap-2 text-lg">
-            <h2 className="font-bold">Status: {emprestimo.status}</h2>
+        <div className="rounded-xl mx-4 border shadow-xl p-2 text-black flex flex-col gap-2 text-lg md:w-96 md:mx-auto">
+            <h2 className="font-bold">Status: <span className={emprestimo.status === "Aprovado" ? 'text-green-500' : ''}>{emprestimo.status}</span></h2>
             <h2 className="">Valor: R$ {emprestimo.valor.toFixed(2)}</h2>
         </div>
     )

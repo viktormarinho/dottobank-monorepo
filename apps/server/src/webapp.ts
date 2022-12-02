@@ -116,4 +116,65 @@ router.post('/emprestimo', verifyJWT, async (req: Req, res) => {
     return res.status(200).json({ msg: 'Empréstimo requerido com sucesso.', emprestimo })
 })
 
+router.post('/transferencia', verifyJWT, async (req: Req, res) => {
+    const { value, to } = req.body;
+    const taxa = value / 10;
+    
+    if (req.user!.conta.saldo < value + taxa) {
+        return res.status(400).json({ err: 'Saldo insuficiente' })
+    }
+
+    const recebedor = await prisma.user.findFirst({
+        where: {
+            conta: {
+                dotto_id: to
+            }
+        }
+    });
+
+    if (!recebedor) {
+        return res.status(404).json({ err: 'Usuário com o dotto id enviado não existe' })
+    }
+
+    await prisma.transferencia.create({
+        data: {
+            pagadorId: req.user!.id,
+            recebedorId: recebedor.id,
+            valor: value
+        }
+    });
+
+    await prisma.user.update({
+        where: {
+            id: req.user?.id
+        },
+        data: {
+            conta: {
+                update: {
+                    saldo: {
+                        decrement: value + taxa
+                    }
+                }
+            }
+        }
+    })
+
+    await prisma.user.update({
+        where: {
+            id: recebedor.id
+        },
+        data: {
+            conta: {
+                update: {
+                    saldo: {
+                        increment: value
+                    }
+                }
+            }
+        }
+    })
+
+    return res.status(200).json({ msg: 'Transferência enviada com sucesso', taxa });
+})
+
 export default { router };

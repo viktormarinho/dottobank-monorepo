@@ -6,7 +6,7 @@ import axios from 'axios';
 import { getAuthHeaders, UserInfo } from "../../util";
 import Image from "next/image";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
-import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
+import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney, GiMoneyStack } from 'react-icons/gi';
 import { HiCreditCard } from 'react-icons/hi'
 import { FiLogOut } from 'react-icons/fi'
 import Link from "next/link";
@@ -59,30 +59,31 @@ const ActionButtons: Action[] = [
   { icon: <GiReceiveMoney className="w-12 h-12 mx-auto mt-4"/>, text: 'Depósito', to: '/webapp/deposito' },
   { icon: <GiTakeMyMoney className="w-12 h-12 mx-auto mt-4" />, text: "Pix", to: '/webapp/pix' },
   { icon: <HiCreditCard className="w-12 h-12 mx-auto mt-4"/>, text: "Cartões", to: '/webapp/cartoes' },
-  { icon: <GiPayMoney className="w-12 h-12 mx-auto mt-4"/>, text: "Transferência", to: '/webapp/transferencia' }
+  { icon: <GiPayMoney className="w-12 h-12 mx-auto mt-4"/>, text: "Transferência", to: '/webapp/transferencia' },
+  { icon: <GiMoneyStack className="w-12 h-12 mx-auto mt-4"/>, text: "Empréstimos", to: '/webapp/emprestimo' }
 ]
 
 const HomeApp = ({ user }: { user: UserInfo }) => {
 
   return (
-    <div className="text-white">
+    <div className="text-white md:px-96 md:h-full">
       <div className="pl-8">
         <h2 className="text-2xl">Seu saldo</h2>
         <Saldo value={user.conta.saldo}/>
       </div>
       <br />
-      <div className="ml-8 flex items-center gap-2 overflow-x-scroll p-4 pl-0">
+      <div className="ml-8 flex items-center gap-2 overflow-x-scroll p-4 pl-0 md:overflow-auto">
         {ActionButtons.map((action, idx) => {
           return <Button key={idx} {...action} />
         })}
       </div>
-      <div className="bg-white rounded-t-3xl text-black mt-2 px-6 pt-8">
+      <div className="bg-white rounded-t-3xl text-black mt-2 px-6 pt-8 md:pb-96">
         <div className="flex flex-col gap-2 items-center justify-between mx-auto">
           <Image src="/moneyEmoji.png" alt="" width={80} height={80} priority/>
           <p className="text-2xl text-center">Empréstimo <span className="text-[#3F83A9] font-semibold">premium</span> para <span className="text-[#3F83A9] font-bold">todos!</span></p>
         </div>
         <Link href="/webapp/emprestimo">
-          <button className="bg-[#3F83A9] text-white border-none rounded-3xl px-4 py-1 w-full mt-4 text-xl font-semibold">Quero o meu!</button>
+          <button className="bg-[#3F83A9] text-white border-none rounded-3xl px-4 py-1 w-full mt-4 text-xl font-semibold md:w-96 md:mx-auto md:block">Quero o meu!</button>
         </Link>
       </div>
     </div>

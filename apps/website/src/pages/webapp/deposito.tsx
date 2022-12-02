@@ -47,7 +47,7 @@ const DepositoRoute = () => {
                 <AddValueChip value="50" onClick={handleAddValue} />
                 <AddValueChip value="100" onClick={handleAddValue} />
             </div>
-            <div className="w-full flex flex-col gap-4 px-16">
+            <div className="md:w-96 w-full flex flex-col gap-4 px-16">
                 <button onClick={handleDeposit} className="text-white text-xl bg-[#3F83A9] hover:bg-[#377294] rounded-lg py-1 w-full">Efetuar depósito</button>
                 <button onClick={() => router.push('/webapp')} className="text-xl bg-[#ebebeb] hover:bg-[#e4e4e4] rounded-lg py-1 w-full">Cancelar</button>
             </div>
